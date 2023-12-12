@@ -8,7 +8,7 @@ Steps to reproduce:
 1. `git clone git@github.com:sam-goldman/ArbSepoliaGasEstimation.git`
 2. `cd ArbSepoliaGasEstimation`
 3. `forge install`
-4. Run the following command, replacing `<your_private_key>` with a funded private key on Arbitrum Sepolia:
+4. Run the following Forge script, replacing `<your_private_key>` with a funded private key on Arbitrum Sepolia:
 ```bash
 PRIVATE_KEY=<your_private_key> forge script script/Counter.s.sol --rpc-url https://sepolia-rollup.arbitrum.io/rpc --broadcast
 ```
