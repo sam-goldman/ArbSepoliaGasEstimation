@@ -1,6 +1,6 @@
 # Arbitrum Sepolia Gas Estimation Bug
 
-The gas estimates in the broadcast files for Arbitrum Sepolia are significantly lower than the actual gas used. This doesn't break `forge script`, but it breaks off-chain tooling that uses `forge script` to estimate the gas without broadcasting the transactions.
+The gas estimates in the broadcast files for Arbitrum Sepolia are significantly lower than the actual gas used. This doesn't break broadcasting with `forge script`, but it breaks off-chain tooling that uses `forge script` to estimate the gas without broadcasting the transactions.
 
 To reproduce this bug, you'll need a funded private key on Arbitrum Sepolia. [Here's a faucet.](https://faucet.quicknode.com/arbitrum/sepolia)
 
