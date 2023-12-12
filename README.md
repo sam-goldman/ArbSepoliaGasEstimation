@@ -1,66 +1,16 @@
-## Foundry
+# Arbitrum Sepolia Gas Estimation Bug
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+The transaction responses in the broadcast files for Arbitrum Sepolia are significantly lower than the actual gas used. This doesn't break `forge script`, but it breaks off-chain tooling that relies on the transaction responses to estimate the gas that will be used in the transactions.
 
-Foundry consists of:
+To reproduce this bug, you'll need a funded private key on Arbitrum Sepolia. [Here's a faucet.](https://faucet.quicknode.com/arbitrum/sepolia)
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+Steps to reproduce:
+1. Download this repo
+2. `forge install`
+3. Run the following command TODO
+```bash
+PRIVATE_KEY=<your_private_key> forge script script/Counter.s.sol --rpc-url https://sepolia-rollup.arbitrum.io/rpc --broadcast
 ```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+4. Open the broadcast file, which should be at `broadcast/Counter.s.sol/421614/run-latest.json`
+5. Go to the `transactions`, then go to the second element in the array, which corresponds to the `counter.increment()` call. You'll see that the `"transaction.gas"` field is `0x6af7`, which is 27383 gas.
+6. In the same file, go to the second element in the `receipts` array. The `gasUsed` is `0xa98c`, which is `43404` gas. This is ~1.5x the estimated gas of 27383.
